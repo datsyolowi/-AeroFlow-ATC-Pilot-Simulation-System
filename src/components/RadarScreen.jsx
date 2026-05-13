@@ -68,22 +68,13 @@ const aircrafts = [
   },
 ];
 
-export default function RadarScreen({
-  selectedAircraft,
-  setSelectedAircraft,
-}) {
-  const alerts = aircrafts.filter(
-    (aircraft) =>
-      aircraft.status === "DESCENT" ||
-      parseInt(aircraft.fuel) < 50
-  );
-
+export default function RadarScreen({ selectedAircraft, setSelectedAircraft }) {
   return (
     <div
       className="
         relative
-        h-[52vh]
-        min-h-[260px]
+        h-[48vh]
+        min-h-[220px]
         max-h-[460px]
         rounded-[28px]
         overflow-hidden
@@ -133,72 +124,86 @@ export default function RadarScreen({
       {/* RADAR CIRCLES */}
       <div className="absolute inset-0 flex items-center justify-center">
         <div className="w-[92%] h-[92%] rounded-full border border-[#7CFF6B]/10 absolute" />
+
         <div className="w-[74%] h-[74%] rounded-full border border-[#7CFF6B]/15 absolute" />
+
         <div className="w-[56%] h-[56%] rounded-full border border-[#7CFF6B]/20 absolute" />
+
         <div className="w-[38%] h-[38%] rounded-full border border-[#7CFF6B]/25 absolute" />
+
         <div className="w-[20%] h-[20%] rounded-full border border-[#7CFF6B]/30 absolute" />
       </div>
 
       {/* CROSS LINES */}
       <div className="absolute inset-0">
         <div className="absolute left-1/2 top-0 bottom-0 w-px bg-[#7CFF6B]/10" />
+
         <div className="absolute top-1/2 left-0 right-0 h-px bg-[#7CFF6B]/10" />
       </div>
 
       {/* RADAR SWEEP */}
-      <motion.div
-        animate={{ rotate: 360 }}
-        transition={{
-          duration: 5,
-          repeat: Infinity,
-          ease: "linear",
-        }}
+      <div
         className="
           absolute
-          left-1/2
-          top-1/2
-          w-1/2
-          h-[2px]
-          origin-left
-          z-20
+          inset-0
+          flex
+          items-center
+          justify-center
+          pointer-events-none
+          overflow-hidden
         "
       >
-        <div
+        <motion.div
+          animate={{
+            rotate: 360,
+          }}
+          transition={{
+            duration: 8,
+            repeat: Infinity,
+            ease: "linear",
+          }}
           className="
-            w-full
-            h-full
-            bg-gradient-to-r
-            from-[#7CFF6B]
-            via-[#7CFF6B]/60
-            to-transparent
-            shadow-[0_0_25px_rgba(124,255,107,0.8)]
+            absolute
+            w-[120%]
+            h-[120%]
           "
-        />
-      </motion.div>
+        >
+          {/* SWEEP LINE */}
+          <div
+            className="
+              absolute
+              left-1/2
+              top-1/2
+              origin-left
+            "
+            style={{
+              width: "50%",
+              height: "2px",
+              background:
+                "linear-gradient(to right, rgba(124,255,107,0.95), rgba(124,255,107,0))",
+            }}
+          />
 
-      {/* SWEEP GLOW */}
-      <motion.div
-        animate={{ rotate: 360 }}
-        transition={{
-          duration: 5,
-          repeat: Infinity,
-          ease: "linear",
-        }}
-        className="
-          absolute
-          left-1/2
-          top-1/2
-          w-[45%]
-          h-[120px]
-          origin-left
-          z-10
-        "
-        style={{
-          clipPath: "polygon(0 0, 100% 50%, 0 100%)",
-          background:
-            "linear-gradient(90deg, rgba(124,255,107,0.15), transparent)",
-        }}
-      />
+          {/* SWEEP CONE */}
+          <div
+            className="
+              absolute
+              left-1/2
+              top-1/2
+              origin-left
+            "
+            style={{
+              width: "34%",
+              height: "160px",
+              clipPath: "polygon(0 0, 100% 50%, 0 100%)",
+              background:
+                "linear-gradient(to right, rgba(124,255,107,0.18), rgba(124,255,107,0))",
+              transform: "translateY(-50%)",
+              filter: "blur(2px)",
+            }}
+          />
+        </motion.div>
+      </div>
 
       {/* MOVING AIRCRAFT */}
       {aircrafts.map((aircraft) => (
@@ -227,16 +232,97 @@ export default function RadarScreen({
           }}
         >
           <div className="relative">
+            {/* TARGET LOCK RING */}
+            {selectedAircraft?.id === aircraft.id && (
+              <motion.div
+                animate={{
+                  rotate: 360,
+                  scale: [1, 1.1, 1],
+                }}
+                transition={{
+                  rotate: {
+                    duration: 6,
+                    repeat: Infinity,
+                    ease: "linear",
+                  },
+                  scale: {
+                    duration: 2,
+                    repeat: Infinity,
+                  },
+                }}
+                className="
+                  absolute
+                  -inset-3
+                  rounded-full
+                  border
+                  border-[#7CFF6B]/60
+                "
+              />
+            )}
+
+            {/* OUTER PULSE */}
+            {selectedAircraft?.id === aircraft.id && (
+              <motion.div
+                animate={{
+                  scale: [1, 1.8],
+                  opacity: [0.5, 0],
+                }}
+                transition={{
+                  duration: 1.8,
+                  repeat: Infinity,
+                }}
+                className="
+                  absolute
+                  inset-0
+                  rounded-full
+                  bg-[#7CFF6B]
+                  blur-md
+                "
+              />
+            )}
+
+            {/* TRAIL */}
+            <div
+              className="
+                absolute
+                top-1/2
+                right-full
+                -translate-y-1/2
+                h-[2px]
+                w-10
+                rounded-full
+                opacity-70
+              "
+              style={{
+                background:
+                  aircraft.status === "DESCENT"
+                    ? "linear-gradient(to left, rgba(255,181,71,0.8), transparent)"
+                    : "linear-gradient(to left, rgba(124,255,107,0.8), transparent)",
+              }}
+            />
+
+            {/* AIRCRAFT DOT */}
             <div
               className={`
                 ${aircraft.size}
                 rounded-full
+                animate-pulse
+                ${
+                  selectedAircraft?.id === aircraft.id
+                    ? "shadow-[0_0_30px_rgba(124,255,107,1)]"
+                    : "shadow-[0_0_18px_rgba(124,255,107,0.95)]"
+                }
               `}
               style={{
                 backgroundColor: aircraft.color,
+                transform:
+                  selectedAircraft?.id === aircraft.id
+                    ? "scale(1.4)"
+                    : "scale(1)",
               }}
             />
 
+            {/* AIRCRAFT GLOW */}
             <div
               className="
                 absolute
@@ -247,80 +333,12 @@ export default function RadarScreen({
               "
               style={{
                 backgroundColor:
-                  aircraft.status === "DESCENT"
-                    ? "#FFB547"
-                    : aircraft.color,
+                  aircraft.status === "DESCENT" ? "#FFB547" : aircraft.color,
               }}
             />
           </div>
         </motion.div>
       ))}
-
-      {/* LIVE ALERT PANEL */}
-      <div
-        className="
-          absolute
-          bottom-4
-          left-4
-          z-40
-          w-[220px]
-          rounded-2xl
-          border
-          border-red-500/10
-          bg-black/30
-          backdrop-blur-xl
-          p-3
-        "
-      >
-        <div className="flex items-center justify-between mb-3">
-          <h3 className="text-xs font-bold tracking-wide">
-            LIVE ALERTS
-          </h3>
-
-          <div
-            className="
-              px-2
-              py-1
-              rounded-full
-              bg-red-500/10
-              text-red-400
-              text-[10px]
-            "
-          >
-            {alerts.length} ACTIVE
-          </div>
-        </div>
-
-        <div className="space-y-2">
-          {alerts.map((alert) => (
-            <div
-              key={alert.id}
-              className="
-                border
-                border-white/5
-                rounded-xl
-                p-2
-              "
-            >
-              <div className="flex justify-between mb-1">
-                <span className="font-semibold text-[11px]">
-                  {alert.callsign}
-                </span>
-
-                <span className="text-[#FFB547] text-[10px]">
-                  WARNING
-                </span>
-              </div>
-
-              <p className="text-zinc-400 text-[10px]">
-                {alert.status === "DESCENT"
-                  ? "Rapid descent detected"
-                  : "Low fuel detected"}
-              </p>
-            </div>
-          ))}
-        </div>
-      </div>
 
       {/* CENTER CORE */}
       <div
@@ -330,16 +348,38 @@ export default function RadarScreen({
           top-1/2
           -translate-x-1/2
           -translate-y-1/2
-          w-5
-          h-5
-          rounded-full
-          bg-[#7CFF6B]
           z-40
-          shadow-[0_0_25px_rgba(124,255,107,0.9)]
         "
-      />
+      >
+        <div
+          className="
+            absolute
+            left-1/2
+            top-1/2
+            -translate-x-1/2
+            -translate-y-1/2
+            w-16
+            h-16
+            rounded-full
+            bg-[#7CFF6B]/20
+            blur-2xl
+            animate-pulse
+          "
+        />
 
-      {/* DATA LABELS */}
+        <div
+          className="
+            relative
+            w-5
+            h-5
+            rounded-full
+            bg-[#7CFF6B]
+            shadow-[0_0_25px_rgba(124,255,107,0.9)]
+          "
+        />
+      </div>
+
+      {/* LABELS */}
       <div
         className="
           absolute
