@@ -395,12 +395,6 @@ export default function RadarScreen({ selectedAircraft, setSelectedAircraft }) {
               animate={{
                 opacity: [0.7, 1, 0.8, 1],
                 scale: [1, 1.15, 1],
-                boxShadow: [
-                  "0 0 12px rgba(124,255,107,0.45)",
-                  "0 0 28px rgba(124,255,107,1)",
-                  "0 0 18px rgba(124,255,107,0.65)",
-                  "0 0 12px rgba(124,255,107,0.45)",
-                ],
               }}
               transition={{
                 duration: 1.8,
@@ -411,18 +405,13 @@ export default function RadarScreen({ selectedAircraft, setSelectedAircraft }) {
               className={`
                 ${aircraft.size}
                 rounded-full
-                ${
-                  hoveredAircraft?.id === aircraft.id
-                    ? "shadow-[0_0_30px_rgba(124,255,107,1)]"
-                    : "shadow-[0_0_18px_rgba(124,255,107,0.95)]"
-                }
               `}
               style={{
                 backgroundColor: aircraft.color,
-                transform:
-                  hoveredAircraft?.id === aircraft.id
-                    ? "scale(1.4)"
-                    : "scale(1)",
+                boxShadow:
+                  aircraft.status === "DESCENT"
+                    ? "0 0 24px rgba(255,181,71,0.9)"
+                    : "0 0 24px rgba(124,255,107,0.9)",
               }}
             />
 
@@ -607,6 +596,63 @@ export default function RadarScreen({ selectedAircraft, setSelectedAircraft }) {
         >
           TRACKING: 3 AIRCRAFT
         </motion.div>
+      </div>
+
+      {/* RADAR CONTROLS */}
+      <div
+        className="
+          absolute
+          top-4
+          right-4
+          z-50
+          flex
+          flex-col
+          gap-2
+        "
+      >
+        <button
+          className="
+            w-9
+            h-9
+            rounded-xl
+            border
+            border-[#7CFF6B]/20
+            bg-[#08111F]/90
+            backdrop-blur-xl
+            text-[#7CFF6B]
+            text-lg
+            font-semibold
+            hover:bg-[#7CFF6B]/10
+            hover:scale-105
+            transition-all
+            duration-200
+            shadow-[0_0_20px_rgba(124,255,107,0.08)]
+          "
+        >
+          +
+        </button>
+
+        <button
+          className="
+            w-9
+            h-9
+            rounded-xl
+            border
+            border-[#7CFF6B]/20
+            bg-[#08111F]/90
+            backdrop-blur-xl
+            text-[#7CFF6B]
+            text-lg
+            font-semibold
+            hover:bg-[#7CFF6B]/10
+            hover:scale-105
+            transition-all
+            duration-200
+            shadow-[0_0_20px_rgba(124,255,107,0.08)]
+          "
+        >
+          −
+        </button>
       </div>
 
       {/* LABELS */}

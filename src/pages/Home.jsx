@@ -4,6 +4,7 @@ import AircraftCard from "../components/AircraftCard";
 
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import CommandConsole from "../components/CommandConsole";
 
 export default function Home() {
   const [selectedAircraft, setSelectedAircraft] = useState(null);
@@ -81,7 +82,43 @@ export default function Home() {
                   font-mono
                 "
             >
-              UTC {utcTime} • SECTOR ALPHA • RADAR ACTIVE
+              <div className="flex items-center gap-3 flex-wrap">
+                <span>UTC {utcTime}</span>
+
+                <span className="text-zinc-700">•</span>
+
+                <span>SECTOR ALPHA</span>
+
+                <span className="text-zinc-700">•</span>
+
+                <div className="flex items-center gap-2">
+                  <motion.div
+                    animate={{
+                      opacity: [0.3, 1, 0.3],
+                    }}
+                    transition={{
+                      duration: 1.5,
+                      repeat: Infinity,
+                    }}
+                    className="
+        w-2
+        h-2
+        rounded-full
+        bg-[#7CFF6B]
+      "
+                  />
+
+                  <span className="text-[#7CFF6B]">SCANNING</span>
+                </div>
+
+                <span className="text-zinc-700">•</span>
+
+                <span className="text-cyan-400">RANGE 240NM</span>
+
+                <span className="text-zinc-700">•</span>
+
+                <span className="text-zinc-500">SAT-LINK STABLE</span>
+              </div>
             </p>
           </div>
 
