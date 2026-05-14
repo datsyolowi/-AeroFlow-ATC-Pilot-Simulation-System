@@ -52,23 +52,6 @@ export default function MainLayout({ children }) {
           "
         />
 
-        {/* GRID */}
-        <div
-          className="
-            absolute
-            inset-0
-            opacity-[0.04]
-            pointer-events-none
-          "
-          style={{
-            backgroundImage: `
-              linear-gradient(to right, white 1px, transparent 1px),
-              linear-gradient(to bottom, white 1px, transparent 1px)
-            `,
-            backgroundSize: "60px 60px",
-          }}
-        />
-
         {/* VIGNETTE */}
         <div
           className="
@@ -80,9 +63,7 @@ export default function MainLayout({ children }) {
         />
 
         {/* CONTENT */}
-        <div className="relative z-10 h-full">
-          {children}
-        </div>
+        <div className="relative z-10 h-full">{children}</div>
       </main>
     </div>
   );

@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { useState } from "react";
 
 const aircrafts = [
   {
@@ -69,6 +70,8 @@ const aircrafts = [
 ];
 
 export default function RadarScreen({ selectedAircraft, setSelectedAircraft }) {
+  const [hoveredAircraft, setHoveredAircraft] = useState(null);
+
   return (
     <div
       className="
@@ -124,20 +127,15 @@ export default function RadarScreen({ selectedAircraft, setSelectedAircraft }) {
       {/* RADAR CIRCLES */}
       <div className="absolute inset-0 flex items-center justify-center">
         <div className="w-[92%] h-[92%] rounded-full border border-[#7CFF6B]/10 absolute" />
-
         <div className="w-[74%] h-[74%] rounded-full border border-[#7CFF6B]/15 absolute" />
-
         <div className="w-[56%] h-[56%] rounded-full border border-[#7CFF6B]/20 absolute" />
-
         <div className="w-[38%] h-[38%] rounded-full border border-[#7CFF6B]/25 absolute" />
-
         <div className="w-[20%] h-[20%] rounded-full border border-[#7CFF6B]/30 absolute" />
       </div>
 
       {/* CROSS LINES */}
       <div className="absolute inset-0">
         <div className="absolute left-1/2 top-0 bottom-0 w-px bg-[#7CFF6B]/10" />
-
         <div className="absolute top-1/2 left-0 right-0 h-px bg-[#7CFF6B]/10" />
       </div>
 
@@ -151,6 +149,7 @@ export default function RadarScreen({ selectedAircraft, setSelectedAircraft }) {
           justify-center
           pointer-events-none
           overflow-hidden
+          z-10
         "
       >
         <motion.div
@@ -158,7 +157,7 @@ export default function RadarScreen({ selectedAircraft, setSelectedAircraft }) {
             rotate: 360,
           }}
           transition={{
-            duration: 8,
+            duration: 6,
             repeat: Infinity,
             ease: "linear",
           }}
@@ -168,23 +167,7 @@ export default function RadarScreen({ selectedAircraft, setSelectedAircraft }) {
             h-[120%]
           "
         >
-          {/* SWEEP LINE */}
-          <div
-            className="
-              absolute
-              left-1/2
-              top-1/2
-              origin-left
-            "
-            style={{
-              width: "50%",
-              height: "2px",
-              background:
-                "linear-gradient(to right, rgba(124,255,107,0.95), rgba(124,255,107,0))",
-            }}
-          />
-
-          {/* SWEEP CONE */}
+          {/* MAIN SWEEP */}
           <div
             className="
               absolute
@@ -194,26 +177,132 @@ export default function RadarScreen({ selectedAircraft, setSelectedAircraft }) {
             "
             style={{
               width: "34%",
-              height: "160px",
-              clipPath: "polygon(0 0, 100% 50%, 0 100%)",
+              height: "220px",
+              clipPath: "polygon(0 50%, 100% 0, 100% 100%)",
               background:
-                "linear-gradient(to right, rgba(124,255,107,0.18), rgba(124,255,107,0))",
+                "linear-gradient(to right, rgba(124,255,107,0.24), rgba(124,255,107,0.02))",
               transform: "translateY(-50%)",
               filter: "blur(2px)",
+            }}
+          />
+
+          {/* SWEEP LINE */}
+          <div
+            className="
+              absolute
+              left-1/2
+              top-1/2
+              origin-left
+              rounded-full
+            "
+            style={{
+              width: "52%",
+              height: "3px",
+              transform: "translateY(-50%)",
+              background:
+                "linear-gradient(to right, rgba(124,255,107,1), rgba(124,255,107,0))",
+              boxShadow: "0 0 25px rgba(124,255,107,0.85)",
+            }}
+          />
+
+          {/* SWEEP GLOW */}
+          <div
+            className="
+              absolute
+              left-1/2
+              top-1/2
+              origin-left
+              rounded-full
+              blur-3xl
+            "
+            style={{
+              width: "320px",
+              height: "320px",
+              transform: "translate(-10%, -50%)",
+              background:
+                "radial-gradient(circle, rgba(124,255,107,0.14), transparent 70%)",
             }}
           />
         </motion.div>
       </div>
 
-      {/* MOVING AIRCRAFT */}
+      {/* FLIGHT PATHS */}
+      <svg
+        className="
+          absolute
+          inset-0
+          w-full
+          h-full
+          pointer-events-none
+          z-10
+        "
+      >
+        <motion.line
+          x1="64%"
+          y1="26%"
+          x2="78%"
+          y2="18%"
+          stroke="rgba(124,255,107,0.35)"
+          strokeWidth="1.5"
+          strokeDasharray="6 6"
+          animate={{
+            strokeDashoffset: [0, -20],
+          }}
+          transition={{
+            duration: 2,
+            repeat: Infinity,
+            ease: "linear",
+          }}
+        />
+
+        <motion.line
+          x1="35%"
+          y1="67%"
+          x2="22%"
+          y2="74%"
+          stroke="rgba(124,255,107,0.35)"
+          strokeWidth="1.5"
+          strokeDasharray="6 6"
+          animate={{
+            strokeDashoffset: [0, -20],
+          }}
+          transition={{
+            duration: 2,
+            repeat: Infinity,
+            ease: "linear",
+          }}
+        />
+
+        <motion.line
+          x1="72%"
+          y1="70%"
+          x2="86%"
+          y2="62%"
+          stroke="rgba(255,181,71,0.45)"
+          strokeWidth="1.5"
+          strokeDasharray="6 6"
+          animate={{
+            strokeDashoffset: [0, -20],
+          }}
+          transition={{
+            duration: 2,
+            repeat: Infinity,
+            ease: "linear",
+          }}
+        />
+      </svg>
+
+      {/* AIRCRAFT */}
       {aircrafts.map((aircraft) => (
         <motion.div
           key={aircraft.id}
+          onMouseEnter={() => setHoveredAircraft(aircraft)}
+          onMouseLeave={() => setHoveredAircraft(null)}
           onClick={() => setSelectedAircraft(aircraft)}
           animate={{
             x: aircraft.path.x,
             y: aircraft.path.y,
-            opacity: [0.5, 1, 0.7, 1],
+            opacity: [0.6, 1, 0.8, 1],
             scale: [1, 1.15, 1],
           }}
           transition={{
@@ -225,6 +314,7 @@ export default function RadarScreen({ selectedAircraft, setSelectedAircraft }) {
             absolute
             z-30
             cursor-pointer
+            group
           "
           style={{
             top: aircraft.position.top,
@@ -232,53 +322,52 @@ export default function RadarScreen({ selectedAircraft, setSelectedAircraft }) {
           }}
         >
           <div className="relative">
-            {/* TARGET LOCK RING */}
-            {selectedAircraft?.id === aircraft.id && (
-              <motion.div
-                animate={{
-                  rotate: 360,
-                  scale: [1, 1.1, 1],
-                }}
-                transition={{
-                  rotate: {
-                    duration: 6,
-                    repeat: Infinity,
-                    ease: "linear",
-                  },
-                  scale: {
-                    duration: 2,
-                    repeat: Infinity,
-                  },
-                }}
-                className="
-                  absolute
-                  -inset-3
-                  rounded-full
-                  border
-                  border-[#7CFF6B]/60
-                "
-              />
-            )}
+            {/* TARGET LOCK */}
+            {hoveredAircraft?.id === aircraft.id && (
+              <>
+                <motion.div
+                  animate={{
+                    rotate: 360,
+                    scale: [1, 1.1, 1],
+                  }}
+                  transition={{
+                    rotate: {
+                      duration: 6,
+                      repeat: Infinity,
+                      ease: "linear",
+                    },
+                    scale: {
+                      duration: 2,
+                      repeat: Infinity,
+                    },
+                  }}
+                  className="
+                    absolute
+                    -inset-3
+                    rounded-full
+                    border
+                    border-[#7CFF6B]/60
+                  "
+                />
 
-            {/* OUTER PULSE */}
-            {selectedAircraft?.id === aircraft.id && (
-              <motion.div
-                animate={{
-                  scale: [1, 1.8],
-                  opacity: [0.5, 0],
-                }}
-                transition={{
-                  duration: 1.8,
-                  repeat: Infinity,
-                }}
-                className="
-                  absolute
-                  inset-0
-                  rounded-full
-                  bg-[#7CFF6B]
-                  blur-md
-                "
-              />
+                <motion.div
+                  animate={{
+                    scale: [1, 1.8],
+                    opacity: [0.5, 0],
+                  }}
+                  transition={{
+                    duration: 1.8,
+                    repeat: Infinity,
+                  }}
+                  className="
+                    absolute
+                    inset-0
+                    rounded-full
+                    bg-[#7CFF6B]
+                    blur-md
+                  "
+                />
+              </>
             )}
 
             {/* TRAIL */}
@@ -301,14 +390,29 @@ export default function RadarScreen({ selectedAircraft, setSelectedAircraft }) {
               }}
             />
 
-            {/* AIRCRAFT DOT */}
-            <div
+            {/* DOT */}
+            <motion.div
+              animate={{
+                opacity: [0.7, 1, 0.8, 1],
+                scale: [1, 1.15, 1],
+                boxShadow: [
+                  "0 0 12px rgba(124,255,107,0.45)",
+                  "0 0 28px rgba(124,255,107,1)",
+                  "0 0 18px rgba(124,255,107,0.65)",
+                  "0 0 12px rgba(124,255,107,0.45)",
+                ],
+              }}
+              transition={{
+                duration: 1.8,
+                repeat: Infinity,
+                ease: "easeInOut",
+                delay: aircraft.id * 0.3,
+              }}
               className={`
                 ${aircraft.size}
                 rounded-full
-                animate-pulse
                 ${
-                  selectedAircraft?.id === aircraft.id
+                  hoveredAircraft?.id === aircraft.id
                     ? "shadow-[0_0_30px_rgba(124,255,107,1)]"
                     : "shadow-[0_0_18px_rgba(124,255,107,0.95)]"
                 }
@@ -316,13 +420,44 @@ export default function RadarScreen({ selectedAircraft, setSelectedAircraft }) {
               style={{
                 backgroundColor: aircraft.color,
                 transform:
-                  selectedAircraft?.id === aircraft.id
+                  hoveredAircraft?.id === aircraft.id
                     ? "scale(1.4)"
                     : "scale(1)",
               }}
             />
 
-            {/* AIRCRAFT GLOW */}
+            {/* MINI HUD */}
+            <div
+              className="
+                absolute
+                top-[-42px]
+                left-1/2
+                -translate-x-1/2
+                whitespace-nowrap
+                px-2
+                py-1
+                rounded-lg
+                bg-[#08111F]/95
+                border
+                border-[#7CFF6B]/20
+                backdrop-blur-md
+                opacity-0
+                group-hover:opacity-100
+                transition
+                pointer-events-none
+                shadow-[0_0_20px_rgba(124,255,107,0.12)]
+              "
+            >
+              <div className="text-[9px] font-mono text-[#7CFF6B]">
+                {aircraft.callsign}
+              </div>
+
+              <div className="text-[8px] text-zinc-400 font-mono">
+                {aircraft.altitude} • {aircraft.speed}
+              </div>
+            </div>
+
+            {/* GLOW */}
             <div
               className="
                 absolute
@@ -339,6 +474,45 @@ export default function RadarScreen({ selectedAircraft, setSelectedAircraft }) {
           </div>
         </motion.div>
       ))}
+
+      {/* ENERGY RINGS */}
+      <div
+        className="
+          absolute
+          inset-0
+          flex
+          items-center
+          justify-center
+          pointer-events-none
+          z-20
+        "
+      >
+        {[...Array(3)].map((_, i) => (
+          <motion.div
+            key={i}
+            animate={{
+              scale: [0.2, 2.8],
+              opacity: [0.35, 0],
+            }}
+            transition={{
+              duration: 4,
+              repeat: Infinity,
+              delay: i * 1.2,
+              ease: "linear",
+            }}
+            className="
+              absolute
+              rounded-full
+              border
+              border-[#7CFF6B]/20
+            "
+            style={{
+              width: "80px",
+              height: "80px",
+            }}
+          />
+        ))}
+      </div>
 
       {/* CENTER CORE */}
       <div
@@ -377,6 +551,62 @@ export default function RadarScreen({ selectedAircraft, setSelectedAircraft }) {
             shadow-[0_0_25px_rgba(124,255,107,0.9)]
           "
         />
+      </div>
+
+      {/* LIVE DATA */}
+      <div
+        className="
+          absolute
+          left-6
+          bottom-6
+          z-40
+          space-y-1
+          text-[9px]
+          tracking-[0.18em]
+          text-[#7CFF6B]/55
+          font-mono
+          pointer-events-none
+        "
+      >
+        <motion.div
+          animate={{ opacity: [0.3, 1, 0.3] }}
+          transition={{
+            duration: 2,
+            repeat: Infinity,
+          }}
+        >
+          SIGNAL STRENGTH: 98.2%
+        </motion.div>
+
+        <motion.div
+          animate={{ opacity: [1, 0.4, 1] }}
+          transition={{
+            duration: 1.5,
+            repeat: Infinity,
+          }}
+        >
+          SCAN RATE: 4.2GHz
+        </motion.div>
+
+        <motion.div
+          animate={{ opacity: [0.5, 1, 0.5] }}
+          transition={{
+            duration: 2.4,
+            repeat: Infinity,
+          }}
+        >
+          SECTOR: ALPHA-07
+        </motion.div>
+
+        <motion.div
+          animate={{ opacity: [1, 0.5, 1] }}
+          transition={{
+            duration: 3,
+            repeat: Infinity,
+          }}
+        >
+          TRACKING: 3 AIRCRAFT
+        </motion.div>
       </div>
 
       {/* LABELS */}
