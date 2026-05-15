@@ -281,6 +281,8 @@ export default function RadarPage() {
           <div
             className="
               col-span-7
+              h-full
+              min-h-0
               flex
               flex-col
               gap-3
