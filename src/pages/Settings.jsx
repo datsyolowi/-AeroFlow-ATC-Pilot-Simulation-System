@@ -21,32 +21,35 @@ function Toggle({ enabled, onToggle, color = "#7CFF6B" }) {
       onClick={onToggle}
       className="relative flex-shrink-0 w-10 h-5 rounded-full transition-all duration-300"
       style={{
-        backgroundColor: enabled ? color + "33" : "rgba(255,255,255,0.05)",
+        backgroundColor: enabled ? color + "33" : "rgba(120,120,120,0.15)",
       }}
     >
       <motion.div
         animate={{ x: enabled ? 20 : 2 }}
         transition={{ type: "spring", stiffness: 500, damping: 30 }}
         className="absolute top-0.5 w-4 h-4 rounded-full"
-        style={{ backgroundColor: enabled ? color : "#52525b" }}
+        style={{ backgroundColor: enabled ? color : "#71717a" }}
       />
     </button>
   );
 }
 
-function Select({ value, options, onChange }) {
+function Select({ value, options, onChange, darkMode }) {
   const [open, setOpen] = useState(false);
 
   return (
     <div className="relative z-50">
       <button
         onClick={() => setOpen(!open)}
-        className="
+        className={`
           flex items-center gap-2 px-3 py-1.5 rounded-xl
-          bg-cyan-400/10 border border-cyan-400/10
-          text-cyan-400 text-xs font-medium whitespace-nowrap
-          hover:bg-cyan-400/20 transition
-        "
+          border text-xs font-medium whitespace-nowrap transition
+          ${
+            darkMode
+              ? "bg-cyan-400/10 border-cyan-400/20 text-cyan-400 hover:bg-cyan-400/20"
+              : "bg-cyan-500/10 border-cyan-500/20 text-cyan-700 hover:bg-cyan-500/20"
+          }
+        `}
       >
         {value}
         <ChevronDown
@@ -61,12 +64,17 @@ function Select({ value, options, onChange }) {
             initial={{ opacity: 0, y: -4 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -4 }}
-            className="
+            className={`
               absolute right-0 top-full mt-1 z-[999]
-              bg-[#0B1220] border border-white/10
               rounded-xl overflow-hidden min-w-[160px]
-              shadow-[0_8px_32px_rgba(0,0,0,0.45)]
-            "
+              shadow-[0_8px_32px_rgba(0,0,0,0.15)]
+              border
+              ${
+                darkMode
+                  ? "bg-[#0B1220] border-white/10"
+                  : "bg-white border-zinc-200"
+              }
+            `}
           >
             {options.map((opt) => (
               <button
@@ -79,8 +87,12 @@ function Select({ value, options, onChange }) {
                   w-full text-left px-3 py-2 text-xs transition
                   ${
                     opt === value
-                      ? "text-cyan-400 bg-cyan-400/10"
-                      : "text-zinc-300 hover:bg-white/5"
+                      ? darkMode
+                        ? "text-cyan-400 bg-cyan-400/10"
+                        : "text-cyan-700 bg-cyan-500/10"
+                      : darkMode
+                        ? "text-zinc-300 hover:bg-white/5"
+                        : "text-zinc-700 hover:bg-zinc-100"
                   }
                 `}
               >
@@ -102,12 +114,17 @@ function Slider({
   unit = "",
   onChange,
   color = "#7CFF6B",
+  darkMode,
 }) {
   const pct = ((value - min) / (max - min)) * 100;
 
   return (
     <div className="flex items-center gap-3">
-      <div className="flex-1 relative h-1.5 rounded-full bg-white/5">
+      <div
+        className={`flex-1 relative h-1.5 rounded-full ${
+          darkMode ? "bg-white/5" : "bg-zinc-200"
+        }`}
+      >
         <div
           className="absolute left-0 top-0 h-full rounded-full"
           style={{ width: `${pct}%`, backgroundColor: color }}
@@ -122,7 +139,12 @@ function Slider({
           className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
         />
       </div>
-      <span className="text-[10px] font-mono text-zinc-300 w-12 text-right">
+
+      <span
+        className={`text-[10px] font-mono w-12 text-right ${
+          darkMode ? "text-zinc-300" : "text-zinc-700"
+        }`}
+      >
         {value}
         {unit}
       </span>
@@ -142,10 +164,14 @@ export default function Settings() {
   const [units, setUnits] = useState("Nautical Miles");
   const [language, setLanguage] = useState("English (US)");
   const [resolution, setResolution] = useState("Ultra HD");
-  const [nightMode, setNightMode] = useState(false);
+
+  const [nightMode, setNightMode] = useState(true);
+
   const [brightness, setBrightness] = useState(80);
   const [region, setRegion] = useState("Asia-Pacific");
   const [saved, setSaved] = useState(false);
+
+  const darkMode = nightMode;
 
   const [coreStats, setCoreStats] = useState({
     radar: 98,
@@ -175,6 +201,7 @@ export default function Settings() {
         ),
       }));
     }, 3000);
+
     return () => clearInterval(interval);
   }, []);
 
@@ -221,33 +248,59 @@ export default function Settings() {
     { label: "Network Stability", value: coreStats.network, color: "#FFB547" },
   ];
 
+  const cardClass = darkMode
+    ? "bg-[#0B1220] border border-white/10 text-white"
+    : "bg-white border border-zinc-200 text-zinc-900 shadow-sm";
+
+  const innerCard = darkMode
+    ? "border border-white/5 bg-black/20"
+    : "border border-zinc-200 bg-zinc-50";
+
   return (
     <MainLayout>
-      {/* Single scroll container */}
-      <div className="w-full h-full overflow-y-auto p-3 pb-12 flex flex-col gap-3">
+      <div
+        className={`w-full h-full overflow-y-auto p-3 pb-12 flex flex-col gap-3 transition-colors duration-300 ${
+          darkMode ? "bg-[#050816]" : "bg-[#f4f7fb]"
+        }`}
+      >
         {/* TOP BAR */}
-        <div className="flex items-center justify-between flex-shrink-0">
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
           <div>
             <p className="text-[#7CFF6B] text-[10px] tracking-[0.28em] mb-1">
               SYSTEM CONFIGURATION CENTER
             </p>
-            <h1 className="text-3xl font-black">Tactical Settings</h1>
-            <div className="flex items-center gap-3 text-[10px] tracking-[0.18em] text-zinc-500 mt-1 font-mono">
+
+            <h1
+              className={`text-3xl font-black ${
+                darkMode ? "text-white" : "text-zinc-900"
+              }`}
+            >
+              Tactical Settings
+            </h1>
+
+            <div
+              className={`flex flex-wrap items-center gap-3 text-[10px] tracking-[0.18em] mt-1 font-mono ${
+                darkMode ? "text-zinc-500" : "text-zinc-500"
+              }`}
+            >
               <span>Operational System Preferences</span>
-              <span className="text-zinc-700">•</span>
+              <span>•</span>
               <span className="text-cyan-400">All Modules Synchronized</span>
             </div>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             <button
               onClick={() => window.location.reload()}
-              className="
+              className={`
                 flex items-center gap-1.5 px-3 py-2 rounded-xl
-                bg-white/5 border border-white/10
-                text-zinc-400 text-xs font-semibold
-                hover:bg-white/10 transition
-              "
+                text-xs font-semibold transition border
+                ${
+                  darkMode
+                    ? "bg-white/5 border-white/10 text-zinc-400 hover:bg-white/10"
+                    : "bg-white border-zinc-200 text-zinc-700 hover:bg-zinc-100"
+                }
+              `}
             >
               <RotateCcw size={12} />
               Reset
@@ -273,6 +326,7 @@ export default function Settings() {
                   transition={{ duration: 1.5, repeat: Infinity }}
                   className="w-2 h-2 rounded-full bg-[#7CFF6B]"
                 />
+
                 <span className="text-xs font-semibold text-[#7CFF6B]">
                   SYSTEM STABLE
                 </span>
@@ -281,37 +335,45 @@ export default function Settings() {
           </div>
         </div>
 
-        {/* MAIN GRID — now auto height, not flex-1/min-h-0 */}
-        <div className="grid grid-cols-12 gap-3">
-          {/* LEFT — 8 cols */}
-          <div className="col-span-8 space-y-3">
+        {/* MAIN GRID */}
+        <div className="grid grid-cols-1 xl:grid-cols-12 gap-3">
+          {/* LEFT */}
+          <div className="xl:col-span-8 space-y-3">
             {/* SYSTEM MODULES */}
-            <div className="bg-[#0B1220] border border-white/10 rounded-3xl p-4">
+            <div className={`${cardClass} rounded-3xl p-4`}>
               <div className="mb-4">
                 <p className="text-zinc-500 text-[10px] tracking-[0.2em] mb-1">
                   CONTROL MODULES
                 </p>
+
                 <h2 className="text-xl font-black">System Configuration</h2>
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 {modules.map((item) => (
                   <div
                     key={item.title}
-                    className="border border-white/5 rounded-2xl p-4 bg-black/20"
+                    className={`${innerCard} rounded-2xl p-4`}
                   >
                     <div className="flex items-start justify-between gap-3">
                       <div className="flex gap-3">
-                        <div className="w-11 h-11 rounded-xl bg-black/30 flex items-center justify-center">
+                        <div
+                          className={`w-11 h-11 rounded-xl flex items-center justify-center ${
+                            darkMode ? "bg-black/30" : "bg-white"
+                          }`}
+                        >
                           <item.icon size={18} style={{ color: item.color }} />
                         </div>
+
                         <div>
                           <h3 className="text-sm font-bold">{item.title}</h3>
+
                           <p className="text-[10px] text-zinc-500 mt-1">
                             {item.desc}
                           </p>
                         </div>
                       </div>
+
                       <Toggle
                         enabled={systems[item.key]}
                         onToggle={() =>
@@ -329,11 +391,12 @@ export default function Settings() {
             </div>
 
             {/* INTERFACE SETTINGS */}
-            <div className="bg-[#0B1220] border border-white/10 rounded-3xl p-4">
+            <div className={`${cardClass} rounded-3xl p-4`}>
               <div className="mb-4">
                 <p className="text-zinc-500 text-[10px] tracking-[0.2em] mb-1">
                   USER PREFERENCES
                 </p>
+
                 <h2 className="text-xl font-black">Interface Settings</h2>
               </div>
 
@@ -374,18 +437,21 @@ export default function Settings() {
                 ].map((item) => (
                   <div
                     key={item.title}
-                    className="flex items-center justify-between gap-4 border border-white/5 rounded-2xl p-4 bg-black/20"
+                    className={`${innerCard} rounded-2xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4`}
                   >
                     <div>
                       <h3 className="text-sm font-semibold">{item.title}</h3>
+
                       <p className="text-[10px] text-zinc-500 mt-1">
                         {item.subtitle}
                       </p>
                     </div>
+
                     <Select
                       value={item.value}
                       options={item.options}
                       onChange={item.onChange}
+                      darkMode={darkMode}
                     />
                   </div>
                 ))}
@@ -393,60 +459,76 @@ export default function Settings() {
             </div>
           </div>
 
-          {/* RIGHT — 4 cols */}
-          <div className="col-span-4 space-y-3">
+          {/* RIGHT */}
+          <div className="xl:col-span-4 space-y-3">
             {/* QUICK ACCESS */}
-            <div className="bg-[#0B1220] border border-white/10 rounded-3xl p-4">
+            <div className={`${cardClass} rounded-3xl p-4`}>
               <div className="mb-4">
                 <p className="text-zinc-500 text-[10px] tracking-[0.2em] mb-1">
                   QUICK ACCESS
                 </p>
+
                 <h2 className="text-xl font-black">Utilities</h2>
               </div>
 
               <div className="space-y-3">
-                {/* Regional Network */}
-                <div className="border border-white/5 rounded-2xl p-4 bg-black/20">
-                  <div className="flex items-center justify-between">
+                {/* REGION */}
+                <div className={`${innerCard} rounded-2xl p-4`}>
+                  <div className="flex items-center justify-between gap-3">
                     <div className="flex items-center gap-3">
-                      <div className="w-11 h-11 rounded-xl bg-black/30 flex items-center justify-center">
+                      <div
+                        className={`w-11 h-11 rounded-xl flex items-center justify-center ${
+                          darkMode ? "bg-black/30" : "bg-white"
+                        }`}
+                      >
                         <Globe size={18} className="text-[#7CFF6B]" />
                       </div>
+
                       <div>
                         <h3 className="text-sm font-semibold">
                           Regional Network
                         </h3>
+
                         <p className="text-[10px] text-zinc-500 mt-1">
                           Server region
                         </p>
                       </div>
                     </div>
+
                     <Select
                       value={region}
                       options={["Asia-Pacific", "North America", "Europe"]}
                       onChange={setRegion}
+                      darkMode={darkMode}
                     />
                   </div>
                 </div>
 
-                {/* Night Mode */}
-                <div className="border border-white/5 rounded-2xl p-4 bg-black/20">
-                  <div className="flex items-center justify-between">
+                {/* NIGHT MODE */}
+                <div className={`${innerCard} rounded-2xl p-4`}>
+                  <div className="flex items-center justify-between gap-3">
                     <div className="flex items-center gap-3">
-                      <div className="w-11 h-11 rounded-xl bg-black/30 flex items-center justify-center">
+                      <div
+                        className={`w-11 h-11 rounded-xl flex items-center justify-center ${
+                          darkMode ? "bg-black/30" : "bg-white"
+                        }`}
+                      >
                         {nightMode ? (
                           <Moon size={18} className="text-[#FFB547]" />
                         ) : (
                           <Sun size={18} className="text-[#FFB547]" />
                         )}
                       </div>
+
                       <div>
                         <h3 className="text-sm font-semibold">Night Mode</h3>
+
                         <p className="text-[10px] text-zinc-500 mt-1">
                           {nightMode ? "Enabled" : "Disabled"}
                         </p>
                       </div>
                     </div>
+
                     <Toggle
                       enabled={nightMode}
                       onToggle={() => setNightMode(!nightMode)}
@@ -455,21 +537,28 @@ export default function Settings() {
                   </div>
                 </div>
 
-                {/* Brightness */}
-                <div className="border border-white/5 rounded-2xl p-4 bg-black/20">
+                {/* BRIGHTNESS */}
+                <div className={`${innerCard} rounded-2xl p-4`}>
                   <div className="flex items-center gap-3 mb-3">
-                    <div className="w-11 h-11 rounded-xl bg-black/30 flex items-center justify-center">
+                    <div
+                      className={`w-11 h-11 rounded-xl flex items-center justify-center ${
+                        darkMode ? "bg-black/30" : "bg-white"
+                      }`}
+                    >
                       <Settings2 size={18} className="text-red-400" />
                     </div>
+
                     <div>
                       <h3 className="text-sm font-semibold">
                         Screen Brightness
                       </h3>
+
                       <p className="text-[10px] text-zinc-500 mt-1">
                         Display luminosity
                       </p>
                     </div>
                   </div>
+
                   <Slider
                     value={brightness}
                     min={10}
@@ -477,17 +566,19 @@ export default function Settings() {
                     unit="%"
                     onChange={setBrightness}
                     color="#f87171"
+                    darkMode={darkMode}
                   />
                 </div>
               </div>
             </div>
 
             {/* CORE STATUS */}
-            <div className="bg-[#0B1220] border border-white/10 rounded-3xl p-4">
+            <div className={`${cardClass} rounded-3xl p-4`}>
               <div className="mb-4">
                 <p className="text-zinc-500 text-[10px] tracking-[0.2em] mb-1">
                   SYSTEM OVERVIEW
                 </p>
+
                 <h2 className="text-xl font-black">Core Status</h2>
               </div>
 
@@ -498,6 +589,7 @@ export default function Settings() {
                       <span className="text-xs text-zinc-400">
                         {item.label}
                       </span>
+
                       <span
                         className="text-xs font-semibold font-mono"
                         style={{ color: item.color }}
@@ -505,7 +597,12 @@ export default function Settings() {
                         {item.value.toFixed(1)}%
                       </span>
                     </div>
-                    <div className="w-full h-2 rounded-full bg-white/5 overflow-hidden">
+
+                    <div
+                      className={`w-full h-2 rounded-full overflow-hidden ${
+                        darkMode ? "bg-white/5" : "bg-zinc-200"
+                      }`}
+                    >
                       <motion.div
                         animate={{ width: `${item.value}%` }}
                         transition={{ duration: 1 }}
