@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { Plane } from "lucide-react";
 import { useState } from "react";
 
 const aircrafts = [
@@ -12,7 +13,7 @@ const aircrafts = [
     status: "CRUISING",
     fuel: "82%",
     color: "#7CFF6B",
-    size: "w-3 h-3",
+    rotation: -35,
     path: {
       x: [0, 30, 60, 30, 0],
       y: [0, -20, 10, 25, 0],
@@ -34,7 +35,7 @@ const aircrafts = [
     status: "CRUISING",
     fuel: "67%",
     color: "#7CFF6B",
-    size: "w-3 h-3",
+    rotation: 145,
     path: {
       x: [0, -20, -40, -10, 0],
       y: [0, 15, 30, 10, 0],
@@ -56,7 +57,7 @@ const aircrafts = [
     status: "DESCENT",
     fuel: "41%",
     color: "#FFB547",
-    size: "w-3 h-3",
+    rotation: 90,
     path: {
       x: [0, 15, 35, 15, 0],
       y: [0, -10, -20, -5, 0],
@@ -237,6 +238,7 @@ export default function RadarScreen({ selectedAircraft, setSelectedAircraft }) {
           z-10
         "
       >
+        {/* AFL245 */}
         <motion.line
           x1="64%"
           y1="26%"
@@ -255,6 +257,7 @@ export default function RadarScreen({ selectedAircraft, setSelectedAircraft }) {
           }}
         />
 
+        {/* BAW672 */}
         <motion.line
           x1="35%"
           y1="67%"
@@ -273,6 +276,7 @@ export default function RadarScreen({ selectedAircraft, setSelectedAircraft }) {
           }}
         />
 
+        {/* DAL912 */}
         <motion.line
           x1="72%"
           y1="70%"
@@ -302,8 +306,7 @@ export default function RadarScreen({ selectedAircraft, setSelectedAircraft }) {
           animate={{
             x: aircraft.path.x,
             y: aircraft.path.y,
-            opacity: [0.6, 1, 0.8, 1],
-            scale: [1, 1.15, 1],
+            opacity: [0.7, 1, 0.85, 1],
           }}
           transition={{
             duration: aircraft.duration,
@@ -323,7 +326,8 @@ export default function RadarScreen({ selectedAircraft, setSelectedAircraft }) {
         >
           <div className="relative">
             {/* TARGET LOCK */}
-            {hoveredAircraft?.id === aircraft.id && (
+            {(hoveredAircraft?.id === aircraft.id ||
+              selectedAircraft?.id === aircraft.id) && (
               <>
                 <motion.div
                   animate={{
@@ -343,7 +347,7 @@ export default function RadarScreen({ selectedAircraft, setSelectedAircraft }) {
                   }}
                   className="
                     absolute
-                    -inset-3
+                    -inset-4
                     rounded-full
                     border
                     border-[#7CFF6B]/60
@@ -352,8 +356,8 @@ export default function RadarScreen({ selectedAircraft, setSelectedAircraft }) {
 
                 <motion.div
                   animate={{
-                    scale: [1, 1.8],
-                    opacity: [0.5, 0],
+                    scale: [1, 2],
+                    opacity: [0.45, 0],
                   }}
                   transition={{
                     duration: 1.8,
@@ -364,7 +368,7 @@ export default function RadarScreen({ selectedAircraft, setSelectedAircraft }) {
                     inset-0
                     rounded-full
                     bg-[#7CFF6B]
-                    blur-md
+                    blur-xl
                   "
                 />
               </>
@@ -373,28 +377,28 @@ export default function RadarScreen({ selectedAircraft, setSelectedAircraft }) {
             {/* TRAIL */}
             <div
               className="
-                absolute
-                top-1/2
-                right-full
-                -translate-y-1/2
-                h-[2px]
-                w-10
-                rounded-full
-                opacity-70
-              "
+              absolute
+              top-1/2
+              right-[14px]
+              -translate-y-1/2
+              h-[2px]
+              w-12
+              rounded-full
+              opacity-80
+            "
               style={{
                 background:
                   aircraft.status === "DESCENT"
-                    ? "linear-gradient(to left, rgba(255,181,71,0.8), transparent)"
-                    : "linear-gradient(to left, rgba(124,255,107,0.8), transparent)",
+                    ? "linear-gradient(to left, rgba(255,181,71,0.9), transparent)"
+                    : "linear-gradient(to left, rgba(124,255,107,0.9), transparent)",
               }}
             />
 
-            {/* DOT */}
+            {/* AIRCRAFT ICON */}
             <motion.div
               animate={{
-                opacity: [0.7, 1, 0.8, 1],
-                scale: [1, 1.15, 1],
+                scale: [1, 1.08, 1],
+                opacity: [0.75, 1, 0.85, 1],
               }}
               transition={{
                 duration: 1.8,
@@ -402,18 +406,44 @@ export default function RadarScreen({ selectedAircraft, setSelectedAircraft }) {
                 ease: "easeInOut",
                 delay: aircraft.id * 0.3,
               }}
-              className={`
-                ${aircraft.size}
-                rounded-full
-              `}
-              style={{
-                backgroundColor: aircraft.color,
-                boxShadow:
-                  aircraft.status === "DESCENT"
-                    ? "0 0 24px rgba(255,181,71,0.9)"
-                    : "0 0 24px rgba(124,255,107,0.9)",
-              }}
-            />
+              className="relative"
+            >
+              {/* GLOW */}
+              <div
+                className="
+                  absolute
+                  inset-0
+                  blur-xl
+                  opacity-80
+                "
+                style={{
+                  background:
+                    aircraft.status === "DESCENT"
+                      ? "rgba(255,181,71,0.45)"
+                      : "rgba(124,255,107,0.45)",
+                }}
+              />
+
+              {/* PLANE */}
+              <Plane
+                size={20}
+                strokeWidth={2.2}
+                className="
+                  relative
+                  z-10
+                "
+                style={{
+                  color: aircraft.status === "DESCENT" ? "#FFB547" : "#7CFF6B",
+
+                  filter:
+                    aircraft.status === "DESCENT"
+                      ? "drop-shadow(0 0 10px rgba(255,181,71,0.9))"
+                      : "drop-shadow(0 0 10px rgba(124,255,107,0.9))",
+
+                  transform: `rotate(${aircraft.rotation}deg)`,
+                }}
+              />
+            </motion.div>
 
             {/* MINI HUD */}
             <div
@@ -445,21 +475,6 @@ export default function RadarScreen({ selectedAircraft, setSelectedAircraft }) {
                 {aircraft.altitude} • {aircraft.speed}
               </div>
             </div>
-
-            {/* GLOW */}
-            <div
-              className="
-                absolute
-                inset-0
-                rounded-full
-                blur-md
-                opacity-70
-              "
-              style={{
-                backgroundColor:
-                  aircraft.status === "DESCENT" ? "#FFB547" : aircraft.color,
-              }}
-            />
           </div>
         </motion.div>
       ))}
@@ -558,7 +573,9 @@ export default function RadarScreen({ selectedAircraft, setSelectedAircraft }) {
         "
       >
         <motion.div
-          animate={{ opacity: [0.3, 1, 0.3] }}
+          animate={{
+            opacity: [0.3, 1, 0.3],
+          }}
           transition={{
             duration: 2,
             repeat: Infinity,
@@ -568,7 +585,9 @@ export default function RadarScreen({ selectedAircraft, setSelectedAircraft }) {
         </motion.div>
 
         <motion.div
-          animate={{ opacity: [1, 0.4, 1] }}
+          animate={{
+            opacity: [1, 0.4, 1],
+          }}
           transition={{
             duration: 1.5,
             repeat: Infinity,
@@ -578,7 +597,9 @@ export default function RadarScreen({ selectedAircraft, setSelectedAircraft }) {
         </motion.div>
 
         <motion.div
-          animate={{ opacity: [0.5, 1, 0.5] }}
+          animate={{
+            opacity: [0.5, 1, 0.5],
+          }}
           transition={{
             duration: 2.4,
             repeat: Infinity,
@@ -588,7 +609,9 @@ export default function RadarScreen({ selectedAircraft, setSelectedAircraft }) {
         </motion.div>
 
         <motion.div
-          animate={{ opacity: [1, 0.5, 1] }}
+          animate={{
+            opacity: [1, 0.5, 1],
+          }}
           transition={{
             duration: 3,
             repeat: Infinity,

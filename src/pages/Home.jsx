@@ -4,7 +4,6 @@ import AircraftCard from "../components/AircraftCard";
 
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import CommandConsole from "../components/CommandConsole";
 
 export default function Home() {
   const [selectedAircraft, setSelectedAircraft] = useState(null);
@@ -56,31 +55,48 @@ export default function Home() {
     <MainLayout>
       <div
         className="
-            w-full
-            h-[100dvh]
-            overflow-hidden
-            p-2
-            flex
-            flex-col
-          "
+          w-full
+          h-[100dvh]
+          overflow-hidden
+          p-2
+          flex
+          flex-col
+        "
       >
         {/* TOP BAR */}
-        <div className="flex items-center justify-between mb-2 flex-shrink-0">
+        <div
+          className="
+            flex
+            items-center
+            justify-between
+            mb-2
+            flex-shrink-0
+          "
+        >
+          {/* LEFT */}
           <div>
-            <p className="text-[#7CFF6B] text-[10px] tracking-[0.25em] mb-1">
+            <p
+              className="
+                text-[#7CFF6B]
+                text-[10px]
+                tracking-[0.25em]
+                mb-1
+              "
+            >
               AIRSPACE OVERVIEW
             </p>
 
             <h1 className="text-lg font-black">Tactical Control Center</h1>
 
-            <p
+            {/* STATUS HUD */}
+            <div
               className="
-                  text-[10px]
-                  tracking-[0.18em]
-                  text-zinc-500
-                  mt-1
-                  font-mono
-                "
+                text-[10px]
+                tracking-[0.18em]
+                text-zinc-500
+                mt-1
+                font-mono
+              "
             >
               <div className="flex items-center gap-3 flex-wrap">
                 <span>UTC {utcTime}</span>
@@ -101,11 +117,11 @@ export default function Home() {
                       repeat: Infinity,
                     }}
                     className="
-        w-2
-        h-2
-        rounded-full
-        bg-[#7CFF6B]
-      "
+                      w-2
+                      h-2
+                      rounded-full
+                      bg-[#7CFF6B]
+                    "
                   />
 
                   <span className="text-[#7CFF6B]">SCANNING</span>
@@ -119,19 +135,22 @@ export default function Home() {
 
                 <span className="text-zinc-500">SAT-LINK STABLE</span>
               </div>
-            </p>
+            </div>
           </div>
 
-          {/* STATUS */}
+          {/* RIGHT STATUS */}
           <div className="flex items-center gap-2">
             {/* WEATHER */}
             <div
               className="
-                  px-3 py-2 rounded-xl
-                  bg-[#0B1220]
-                  border border-white/10
-                  min-w-[140px]
-                "
+                px-3
+                py-2
+                rounded-xl
+                bg-[#0B1220]
+                border
+                border-white/10
+                min-w-[140px]
+              "
             >
               <p className="text-zinc-500 text-[9px] mb-1">WEATHER</p>
 
@@ -141,11 +160,14 @@ export default function Home() {
             {/* AIRSPACE */}
             <div
               className="
-                  px-3 py-2 rounded-xl
-                  bg-[#0B1220]
-                  border border-white/10
-                  min-w-[110px]
-                "
+                px-3
+                py-2
+                rounded-xl
+                bg-[#0B1220]
+                border
+                border-white/10
+                min-w-[110px]
+              "
             >
               <p className="text-zinc-500 text-[9px] mb-1">AIRSPACE</p>
 
@@ -160,14 +182,22 @@ export default function Home() {
                     repeat: Infinity,
                   }}
                   className="
-                      w-2
-                      h-2
-                      rounded-full
-                      bg-[#7CFF6B]
-                    "
+                    w-2
+                    h-2
+                    rounded-full
+                    bg-[#7CFF6B]
+                  "
                 />
 
-                <h3 className="font-semibold text-xs text-[#7CFF6B]">ACTIVE</h3>
+                <h3
+                  className="
+                    font-semibold
+                    text-xs
+                    text-[#7CFF6B]
+                  "
+                >
+                  ACTIVE
+                </h3>
               </div>
             </div>
           </div>
@@ -176,22 +206,22 @@ export default function Home() {
         {/* MAIN DASHBOARD */}
         <div
           className="
-              grid
-              grid-cols-12
-              gap-3
-              flex-1
-              min-h-0
-            "
+            grid
+            grid-cols-12
+            gap-3
+            flex-1
+            min-h-0
+          "
         >
           {/* LEFT SIDE */}
           <div
             className="
-                col-span-8
-                flex
-                flex-col
-                gap-3
-                min-h-0
-              "
+              col-span-9
+              flex
+              flex-col
+              gap-3
+              min-h-0
+            "
           >
             {/* RADAR */}
             <div className="flex-1 min-h-0">
@@ -214,18 +244,17 @@ export default function Home() {
               {/* LIVE FEED */}
               <div
                 className="
-                bg-[#08111F]
-                border
-                border-cyan-500/10
-                rounded-xl
-                p-3
-                flex
-                flex-col
-                gap-1
-                shadow-[0_0_20px_rgba(0,255,200,0.03)]
-              "
+                  bg-[#08111F]
+                  border
+                  border-cyan-500/10
+                  rounded-xl
+                  p-3
+                  flex
+                  flex-col
+                  gap-1
+                  shadow-[0_0_20px_rgba(0,255,200,0.03)]
+                "
               >
-                {/* HEADER */}
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <div
@@ -257,7 +286,6 @@ export default function Home() {
                   </div>
                 </div>
 
-                {/* FEED CONTENT */}
                 <div
                   className="
                     grid
@@ -265,7 +293,6 @@ export default function Home() {
                     gap-x-10
                   "
                 >
-                  {/* LEFT COLUMN */}
                   <div
                     className="
                       space-y-1
@@ -303,7 +330,6 @@ export default function Home() {
                     ))}
                   </div>
 
-                  {/* RIGHT COLUMN */}
                   <div
                     className="
                       space-y-1
@@ -346,33 +372,33 @@ export default function Home() {
               {/* ARRIVALS + DEPARTURES */}
               <div
                 className="
-                    grid
-                    grid-cols-2
-                    gap-3
-                  "
+                  grid
+                  grid-cols-2
+                  gap-3
+                "
               >
                 {/* ARRIVALS */}
                 <div
                   className="
-                      bg-[#0B1220]
-                      border
-                      border-white/10
-                      rounded-xl
-                      p-3
-                    "
+                    bg-[#0B1220]
+                    border
+                    border-white/10
+                    rounded-xl
+                    p-3
+                  "
                 >
                   <div className="flex items-center justify-between mb-2">
                     <h2 className="text-sm font-bold">Arrivals</h2>
 
                     <div
                       className="
-                          px-2
-                          py-1
-                          rounded-full
-                          text-[9px]
-                          bg-[#7CFF6B]/10
-                          text-[#7CFF6B]
-                        "
+                        px-2
+                        py-1
+                        rounded-full
+                        text-[9px]
+                        bg-[#7CFF6B]/10
+                        text-[#7CFF6B]
+                      "
                     >
                       5 Active
                     </div>
@@ -402,25 +428,25 @@ export default function Home() {
                 {/* DEPARTURES */}
                 <div
                   className="
-                      bg-[#0B1220]
-                      border
-                      border-white/10
-                      rounded-xl
-                      p-3
-                    "
+                    bg-[#0B1220]
+                    border
+                    border-white/10
+                    rounded-xl
+                    p-3
+                  "
                 >
                   <div className="flex items-center justify-between mb-2">
                     <h2 className="text-sm font-bold">Departures</h2>
 
                     <div
                       className="
-                          px-2
-                          py-1
-                          rounded-full
-                          text-[9px]
-                          bg-[#7CFF6B]/10
-                          text-[#7CFF6B]
-                        "
+                        px-2
+                        py-1
+                        rounded-full
+                        text-[9px]
+                        bg-[#7CFF6B]/10
+                        text-[#7CFF6B]
+                      "
                     >
                       5 Active
                     </div>
@@ -453,34 +479,34 @@ export default function Home() {
           {/* RIGHT PANEL */}
           <div
             className="
-                col-span-4
-                h-full
-                min-h-0
-                overflow-hidden
-              "
+              col-span-3
+              h-full
+              min-h-0
+              overflow-hidden
+            "
           >
             <div
               className="
-                  h-full
-                  flex
-                  flex-col
-                  gap-2
-                  overflow-y-auto
-                  scroll-smooth
-                  pr-1
-                  pb-10
-                "
+                h-full
+                flex
+                flex-col
+                gap-2
+                overflow-y-auto
+                scroll-smooth
+                pr-1
+                pb-10
+              "
             >
               {selectedAircraft ? (
                 <div
                   className="
-                      bg-[#0B1220]
-                      border
-                      border-[#7CFF6B]/10
-                      rounded-3xl
-                      p-4
-                      flex-1
-                    "
+                    bg-[#0B1220]
+                    border
+                    border-[#7CFF6B]/10
+                    rounded-3xl
+                    p-4
+                    flex-1
+                  "
                 >
                   <div className="flex items-start justify-between mb-4">
                     <div>
@@ -496,10 +522,10 @@ export default function Home() {
                     <button
                       onClick={() => setSelectedAircraft(null)}
                       className="
-                          text-zinc-500
-                          hover:text-white
-                          transition
-                        "
+                        text-zinc-500
+                        hover:text-white
+                        transition
+                      "
                     >
                       ✕
                     </button>
@@ -508,21 +534,25 @@ export default function Home() {
                   <div className="space-y-3 text-sm">
                     <div className="flex justify-between">
                       <span className="text-zinc-500">ALTITUDE</span>
+
                       <span>{selectedAircraft.altitude}</span>
                     </div>
 
                     <div className="flex justify-between">
                       <span className="text-zinc-500">SPEED</span>
+
                       <span>{selectedAircraft.speed}</span>
                     </div>
 
                     <div className="flex justify-between">
                       <span className="text-zinc-500">HEADING</span>
+
                       <span>{selectedAircraft.heading}</span>
                     </div>
 
                     <div className="flex justify-between">
                       <span className="text-zinc-500">DESTINATION</span>
+
                       <span>{selectedAircraft.destination}</span>
                     </div>
 
@@ -542,20 +572,20 @@ export default function Home() {
 
                     <div className="flex justify-between">
                       <span className="text-zinc-500">FUEL</span>
+
                       <span>{selectedAircraft.fuel}</span>
                     </div>
                   </div>
                 </div>
               ) : (
                 <>
-                  {/* AIRCRAFT CARDS */}
                   <div
                     className="
-                        flex
-                        flex-col
-                        gap-2
-                        flex-shrink-0
-                      "
+                      flex
+                      flex-col
+                      gap-2
+                      flex-shrink-0
+                    "
                   >
                     <AircraftCard
                       callsign="AFL245"
@@ -579,29 +609,28 @@ export default function Home() {
                     />
                   </div>
 
-                  {/* ALERTS */}
                   <div
                     className="
-                        bg-[#0B1220]
-                        border
-                        border-[#FFB547]/20
-                        rounded-xl
-                        p-2.5
-                        flex-shrink-0
-                      "
+                      bg-[#0B1220]
+                      border
+                      border-[#FFB547]/20
+                      rounded-xl
+                      p-2.5
+                      flex-shrink-0
+                    "
                   >
                     <div className="flex items-center justify-between mb-2">
                       <h3 className="text-sm font-bold">Alerts</h3>
 
                       <div
                         className="
-                            px-2
-                            py-1
-                            rounded-full
-                            text-[9px]
-                            bg-[#FFB547]/10
-                            text-[#FFB547]
-                          "
+                          px-2
+                          py-1
+                          rounded-full
+                          text-[9px]
+                          bg-[#FFB547]/10
+                          text-[#FFB547]
+                        "
                       >
                         2 Active
                       </div>
@@ -610,11 +639,11 @@ export default function Home() {
                     <div className="space-y-2">
                       <div
                         className="
-                            border
-                            border-white/5
-                            rounded-xl
-                            p-2
-                          "
+                          border
+                          border-white/5
+                          rounded-xl
+                          p-2
+                        "
                       >
                         <p className="text-[#FFB547] text-xs font-semibold mb-1">
                           Moderate Traffic
@@ -627,11 +656,11 @@ export default function Home() {
 
                       <div
                         className="
-                            border
-                            border-red-500/10
-                            rounded-xl
-                            p-2
-                          "
+                          border
+                          border-red-500/10
+                          rounded-xl
+                          p-2
+                        "
                       >
                         <p className="text-red-400 text-xs font-semibold mb-1">
                           Weather Warning
