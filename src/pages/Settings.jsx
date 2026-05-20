@@ -70,11 +70,7 @@ function Select({ value, options, onChange, darkMode }) {
               rounded-xl overflow-hidden min-w-[160px]
               shadow-[0_8px_32px_rgba(0,0,0,0.10)]
               border
-              ${
-                darkMode
-                  ? "bg-[#0B1220] border-white/10"
-                  : "bg-white border-zinc-200"
-              }
+              ${darkMode ? "bg-[#0B1220] border-white/10" : "bg-white border-zinc-200"}
             `}
           >
             {options.map((opt) => (
@@ -143,11 +139,8 @@ function Slider({
           className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
         />
       </div>
-
       <span
-        className={`text-[10px] font-mono w-12 text-right ${
-          darkMode ? "text-zinc-300" : "text-zinc-500"
-        }`}
+        className={`text-[10px] font-mono w-12 text-right ${darkMode ? "text-zinc-300" : "text-zinc-500"}`}
       >
         {value}
         {unit}
@@ -279,27 +272,29 @@ export default function Settings() {
   return (
     <MainLayout>
       <div
-        className={`w-full h-full overflow-y-auto p-3 pb-12 flex flex-col gap-3 transition-colors duration-300 ${
-          darkMode ? "bg-[#050816]" : "bg-[#fafafa]"
+        className={`w-full h-full overflow-y-auto px-6 py-6 pb-14 flex flex-col gap-6 transition-colors duration-300 ${
+          darkMode ? "bg-[#050816]" : "bg-[#f5f5f7]"
         }`}
       >
         {/* TOP BAR */}
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-5">
           <div>
             <p
-              className={`text-[10px] tracking-[0.28em] mb-1 ${darkMode ? "text-[#7CFF6B]" : "text-zinc-400"}`}
+              className={`text-[10px] tracking-[0.32em] mb-2 font-semibold ${
+                darkMode ? "text-[#7CFF6B]" : "text-zinc-400"
+              }`}
             >
               SYSTEM CONFIGURATION CENTER
             </p>
-
             <h1
-              className={`text-3xl font-black ${darkMode ? "text-white" : "text-zinc-900"}`}
+              className={`text-4xl font-black ${darkMode ? "text-white" : "text-zinc-900"}`}
             >
               Tactical Settings
             </h1>
-
             <div
-              className={`flex flex-wrap items-center gap-3 text-[10px] tracking-[0.18em] mt-1 font-mono ${darkMode ? "text-zinc-500" : "text-zinc-400"}`}
+              className={`flex flex-wrap items-center gap-3 text-[10px] tracking-[0.18em] mt-2 font-mono ${
+                darkMode ? "text-zinc-500" : "text-zinc-400"
+              }`}
             >
               <span>Operational System Preferences</span>
               <span>•</span>
@@ -309,11 +304,11 @@ export default function Settings() {
             </div>
           </div>
 
-          <div className="flex flex-wrap items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2.5">
             <button
               onClick={() => window.location.reload()}
               className={`
-                flex items-center gap-1.5 px-3 py-2 rounded-xl
+                flex items-center gap-1.5 px-4 py-2.5 rounded-xl
                 text-xs font-semibold transition border
                 ${
                   darkMode
@@ -328,7 +323,7 @@ export default function Settings() {
 
             <button
               onClick={handleSave}
-              className={`flex items-center gap-1.5 px-3 py-2 rounded-xl border text-xs font-semibold transition ${
+              className={`flex items-center gap-1.5 px-4 py-2.5 rounded-xl border text-xs font-semibold transition ${
                 darkMode
                   ? ""
                   : "bg-zinc-900 border-zinc-900 text-white hover:bg-zinc-700"
@@ -348,7 +343,7 @@ export default function Settings() {
             </button>
 
             <div
-              className={`px-3 py-2 rounded-xl border ${
+              className={`px-4 py-2.5 rounded-xl border ${
                 darkMode
                   ? "border-[#7CFF6B]/20 bg-[#7CFF6B]/10"
                   : "border-zinc-200 bg-white"
@@ -371,28 +366,28 @@ export default function Settings() {
         </div>
 
         {/* MAIN GRID */}
-        <div className="grid grid-cols-1 xl:grid-cols-12 gap-3 xl:items-stretch">
+        <div className="grid grid-cols-1 xl:grid-cols-12 gap-5 xl:items-stretch">
           {/* LEFT */}
-          <div className="xl:col-span-8 flex flex-col gap-3">
+          <div className="xl:col-span-8 flex flex-col gap-5">
             {/* SYSTEM MODULES */}
-            <div className={`${cardClass} rounded-3xl p-4`}>
-              <div className="mb-4">
-                <p className="text-zinc-500 text-[10px] tracking-[0.2em] mb-1">
+            <div className={`${cardClass} rounded-3xl p-6`}>
+              <div className="mb-6">
+                <p className="text-zinc-500 text-[10px] tracking-[0.2em] mb-1.5">
                   CONTROL MODULES
                 </p>
                 <h2 className="text-xl font-black">System Configuration</h2>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {modules.map((item) => (
                   <div
                     key={item.title}
-                    className={`${innerCard} rounded-2xl p-4`}
+                    className={`${innerCard} rounded-2xl p-5`}
                   >
                     <div className="flex items-start justify-between gap-3">
-                      <div className="flex gap-3">
+                      <div className="flex gap-3.5">
                         <div
-                          className={`w-11 h-11 rounded-xl flex items-center justify-center ${
+                          className={`w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0 ${
                             darkMode
                               ? "bg-black/30"
                               : "bg-white border border-zinc-100"
@@ -402,7 +397,7 @@ export default function Settings() {
                         </div>
                         <div>
                           <h3 className="text-sm font-bold">{item.title}</h3>
-                          <p className="text-[10px] text-zinc-500 mt-1">
+                          <p className="text-[10px] text-zinc-500 mt-1.5">
                             {item.desc}
                           </p>
                         </div>
@@ -425,9 +420,9 @@ export default function Settings() {
             </div>
 
             {/* INTERFACE SETTINGS */}
-            <div className={`${cardClass} rounded-3xl p-4 flex-1`}>
-              <div className="mb-4">
-                <p className="text-zinc-500 text-[10px] tracking-[0.2em] mb-1">
+            <div className={`${cardClass} rounded-3xl p-6 flex-1`}>
+              <div className="mb-6">
+                <p className="text-zinc-500 text-[10px] tracking-[0.2em] mb-1.5">
                   USER PREFERENCES
                 </p>
                 <h2 className="text-xl font-black">Interface Settings</h2>
@@ -491,11 +486,11 @@ export default function Settings() {
           </div>
 
           {/* RIGHT */}
-          <div className="xl:col-span-4 flex flex-col gap-3 h-full">
+          <div className="xl:col-span-4 flex flex-col gap-5 h-full">
             {/* QUICK ACCESS */}
-            <div className={`${cardClass} rounded-3xl p-4 flex-1`}>
-              <div className="mb-4">
-                <p className="text-zinc-500 text-[10px] tracking-[0.2em] mb-1">
+            <div className={`${cardClass} rounded-3xl p-6 flex-1`}>
+              <div className="mb-6">
+                <p className="text-zinc-500 text-[10px] tracking-[0.2em] mb-1.5">
                   QUICK ACCESS
                 </p>
                 <h2 className="text-xl font-black">Utilities</h2>
@@ -572,7 +567,7 @@ export default function Settings() {
 
                 {/* BRIGHTNESS */}
                 <div className={`${innerCard} rounded-2xl p-4`}>
-                  <div className="flex items-center gap-3 mb-3">
+                  <div className="flex items-center gap-3 mb-4">
                     <div
                       className={`w-11 h-11 rounded-xl flex items-center justify-center ${
                         darkMode
@@ -608,15 +603,15 @@ export default function Settings() {
             </div>
 
             {/* CORE STATUS */}
-            <div className={`${cardClass} rounded-3xl p-4`}>
-              <div className="mb-4">
-                <p className="text-zinc-500 text-[10px] tracking-[0.2em] mb-1">
+            <div className={`${cardClass} rounded-3xl p-6`}>
+              <div className="mb-6">
+                <p className="text-zinc-500 text-[10px] tracking-[0.2em] mb-1.5">
                   SYSTEM OVERVIEW
                 </p>
                 <h2 className="text-xl font-black">Core Status</h2>
               </div>
 
-              <div className="space-y-4">
+              <div className="space-y-5">
                 {statItems.map((item) => (
                   <div key={item.label}>
                     <div className="flex items-center justify-between mb-2">
@@ -631,7 +626,7 @@ export default function Settings() {
                       </span>
                     </div>
                     <div
-                      className={`w-full h-2 rounded-full overflow-hidden ${
+                      className={`w-full h-1.5 rounded-full overflow-hidden ${
                         darkMode ? "bg-white/5" : "bg-zinc-100"
                       }`}
                     >
