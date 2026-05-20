@@ -1,65 +1,41 @@
 import Sidebar from "../components/Sidebar";
+import { useTheme } from "../context/ThemeContext";
 
 export default function MainLayout({ children }) {
+  const { nightMode } = useTheme();
+
   return (
     <div
-      className="
-        h-[100dvh]
-        bg-[#050816]
-        text-white
-        flex
-        overflow-hidden
-      "
+      className={`h-[100dvh] flex overflow-hidden transition-colors duration-300 ${
+        nightMode ? "bg-[#050816] text-white" : "bg-[#0e1a2e] text-slate-100"
+      }`}
     >
       {/* SIDEBAR */}
       <Sidebar />
 
       {/* MAIN CONTENT */}
-      <main
-        className="
-          flex-1
-          relative
-          overflow-hidden
-        "
-      >
+      <main className="flex-1 relative overflow-hidden">
         {/* RADAR ATMOSPHERE */}
         <div
-          className="
-            absolute
-            top-[-300px]
-            left-[20%]
-            w-[900px]
-            h-[900px]
-            rounded-full
-            bg-[#7CFF6B]/[0.06]
-            blur-[180px]
-            pointer-events-none
-          "
+          className={`absolute top-[-300px] left-[20%] w-[900px] h-[900px] rounded-full blur-[180px] pointer-events-none transition-colors duration-300 ${
+            nightMode ? "bg-[#7CFF6B]/[0.06]" : "bg-[#7CFF6B]/[0.04]"
+          }`}
         />
 
         {/* SECONDARY GLOW */}
         <div
-          className="
-            absolute
-            bottom-[-250px]
-            right-[-150px]
-            w-[700px]
-            h-[700px]
-            rounded-full
-            bg-cyan-500/[0.04]
-            blur-[160px]
-            pointer-events-none
-          "
+          className={`absolute bottom-[-250px] right-[-150px] w-[700px] h-[700px] rounded-full blur-[160px] pointer-events-none transition-colors duration-300 ${
+            nightMode ? "bg-cyan-500/[0.04]" : "bg-sky-400/[0.07]"
+          }`}
         />
 
         {/* VIGNETTE */}
         <div
-          className="
-            absolute
-            inset-0
-            bg-[radial-gradient(circle_at_center,transparent_45%,rgba(0,0,0,0.45))]
-            pointer-events-none
-          "
+          className={`absolute inset-0 pointer-events-none transition-opacity duration-300 ${
+            nightMode
+              ? "bg-[radial-gradient(circle_at_center,transparent_45%,rgba(0,0,0,0.45))]"
+              : "bg-[radial-gradient(circle_at_center,transparent_45%,rgba(0,0,0,0.35))]"
+          }`}
         />
 
         {/* CONTENT */}

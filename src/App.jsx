@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { ThemeProvider } from "./context/ThemeContext";
 
 import Home from "./pages/Home";
 import ATC from "./pages/ATC";
@@ -11,32 +12,34 @@ import NotFound from "./pages/NotFound";
 
 export default function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        {/* HOME */}
-        <Route path="/" element={<Home />} />
+    <ThemeProvider>
+      <BrowserRouter>
+        <Routes>
+          {/* HOME */}
+          <Route path="/" element={<Home />} />
 
-        {/* ATC */}
-        <Route path="/atc" element={<ATC />} />
+          {/* ATC */}
+          <Route path="/atc" element={<ATC />} />
 
-        {/* RADAR */}
-        <Route path="/radar" element={<Radar />} />
+          {/* RADAR */}
+          <Route path="/radar" element={<Radar />} />
 
-        {/* PILOT */}
-        <Route path="/pilot" element={<Pilot />} />
+          {/* PILOT */}
+          <Route path="/pilot" element={<Pilot />} />
 
-        {/* ANALYTICS */}
-        <Route path="/analytics" element={<Analytics />} />
+          {/* ANALYTICS */}
+          <Route path="/analytics" element={<Analytics />} />
 
-        {/* ALERTS */}
-        <Route path="/alerts" element={<Alerts />} />
+          {/* ALERTS */}
+          <Route path="/alerts" element={<Alerts />} />
 
-        {/* SETTINGS */}
-        <Route path="/settings" element={<Settings />} />
+          {/* SETTINGS */}
+          <Route path="/settings" element={<Settings />} />
 
-        {/* 404 */}
-        <Route path="*" element={<NotFound />} />
-      </Routes>
-    </BrowserRouter>
+          {/* 404 */}
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </BrowserRouter>
+    </ThemeProvider>
   );
 }
